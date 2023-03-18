@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 class TipTimeProvider with ChangeNotifier {
   var constController = TextEditingController();
+  String _amount = "0.00";
+  String get getAmount => _amount;
   int? _selectedRadio = null;
   int? get getSelectedRadio => _selectedRadio;
   bool isSelected = false;
@@ -13,6 +15,14 @@ class TipTimeProvider with ChangeNotifier {
 
   void tipCalculation(int dato) {
     // TODO: completar
+    double calculate = dato + (dato * (_selectedRadio! / 100));
+
+    if (!isSelected) {
+      _amount = calculate.toStringAsFixed(2);
+    } else {
+      _amount = calculate.ceilToDouble().toStringAsFixed(0);
+    }
+    notifyListeners();
   }
 
   void setIsSelected(bool switchValue) {

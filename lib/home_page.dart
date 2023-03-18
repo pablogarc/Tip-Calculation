@@ -19,6 +19,7 @@ class HomePage extends StatelessWidget {
             title: Padding(
               padding: EdgeInsets.only(right: 24),
               child: TextField(
+                controller: context.watch<TipTimeProvider>().constController,
                 decoration: InputDecoration(
                   labelText: 'Cost of service',
                   border: OutlineInputBorder(),
@@ -30,28 +31,31 @@ class HomePage extends StatelessWidget {
             leading: Icon(Icons.dinner_dining),
             title: Text("How was the service?"),
           ),
-          Column(
-            children: context
-                .read<TipTimeProvider>()
-                .radioGroupValues
-                .entries
-                .map(
-                  (e) => ListTile(
-                    leading: Radio(
-                      value: e.key,
-                      groupValue:
-                          context.watch<TipTimeProvider>().getSelectedRadio,
-                      onChanged: (newVal) {
-                        // TODO: cambiar estado de los radios
-                        context
-                            .read<TipTimeProvider>()
-                            .setSelectedRadio(newVal);
-                      },
+          Padding(
+            padding: const EdgeInsets.only(left: 30.0),
+            child: Column(
+              children: context
+                  .read<TipTimeProvider>()
+                  .radioGroupValues
+                  .entries
+                  .map(
+                    (e) => ListTile(
+                      leading: Radio(
+                        value: e.key,
+                        groupValue:
+                            context.watch<TipTimeProvider>().getSelectedRadio,
+                        onChanged: (newVal) {
+                          // TODO: cambiar estado de los radios
+                          context
+                              .read<TipTimeProvider>()
+                              .setSelectedRadio(newVal);
+                        },
+                      ),
+                      title: Text("${e.value}"),
                     ),
-                    title: Text("${e.value}"),
-                  ),
-                )
-                .toList(),
+                  )
+                  .toList(),
+            ),
           ),
           SwitchListTile(
             secondary: Icon(Icons.credit_card),
@@ -65,13 +69,15 @@ class HomePage extends StatelessWidget {
             color: Colors.green,
             child: Text("CALCULATE"),
             onPressed: () {
-              context.read<TipTimeProvider>().tipCalculation(23244);
+              context.read<TipTimeProvider>().tipCalculation(int.parse(
+                  context.read<TipTimeProvider>().constController.text));
             },
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Text("Tip amount: \$20.00"),
+              Text(
+                  "Tip amount: \$${context.read<TipTimeProvider>().getAmount}"),
             ],
           ),
         ],
